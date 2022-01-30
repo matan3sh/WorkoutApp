@@ -1,6 +1,7 @@
+import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { View, Text, Button } from "react-native";
 
-export default function HomeScreen({ navigation }: any) {
+export default function HomeScreen({ navigation }: NativeStackHeaderProps) {
   return (
     <View>
       <Text>I am Home Screen</Text>
