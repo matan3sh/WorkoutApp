@@ -1,4 +1,4 @@
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text, Pressable } from "react-native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 
 import WorkoutItem from "../components/WorkoutItem";
@@ -12,7 +12,13 @@ export default function HomeScreen({ navigation }: NativeStackHeaderProps) {
       <Text style={styles.header}>New Workouts</Text>
       <FlatList
         data={data as Workout[]}
-        renderItem={WorkoutItem}
+        renderItem={({ item }) => {
+          return (
+            <Pressable onPress={() => alert(`I am pressed - ${item.name}`)}>
+              <WorkoutItem item={item} />
+            </Pressable>
+          );
+        }}
         keyExtractor={(item) => item.slug}
       />
     </View>
