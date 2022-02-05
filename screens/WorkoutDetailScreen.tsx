@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { FontAwesome } from "@expo/vector-icons";
@@ -9,6 +9,7 @@ import WorkoutItem from "../components/WorkoutItem";
 import { useWorkoutBySlug } from "../hooks/useWorkoutBySlug";
 import { formatSec } from "../utils/time";
 import { SequenceItem } from "../types/data";
+import { useCountDown } from "../hooks/useCountDown";
 
 type DetailParams = {
   route: {
@@ -22,23 +23,13 @@ type Navigation = NativeStackHeaderProps & DetailParams;
 
 export default function WorkoutDetailScreen({ route }: Navigation) {
   const [sequence, setSquence] = useState<SequenceItem[]>([]);
-  const [countdown, setCountdown] = useState(-1);
   const [trackerIdx, setTrackerIdx] = useState(-1);
   const workout = useWorkoutBySlug(route.params.slug);
 
-  useEffect(() => {
-    if (trackerIdx === -1) return;
-    setCountdown(workout!.sequence[trackerIdx].duration);
-
-    const intervalId = window.setInterval(() => {
-      setCountdown((count) => {
-        console.log(count);
-        return count - 1;
-      });
-    }, 1000);
-
-    return () => window.clearInterval(intervalId);
-  }, [trackerIdx]);
+  const countDown = useCountDown(
+    trackerIdx,
+    trackerIdx >= 0 ? sequence[trackerIdx].duration : -1
+  );
 
   const addItemToSequence = (idx: number) => {
     setSquence([...sequence, workout!.sequence[idx]]);
