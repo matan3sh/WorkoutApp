@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { FontAwesome } from "@expo/vector-icons";
@@ -30,6 +30,18 @@ export default function WorkoutDetailScreen({ route }: Navigation) {
     trackerIdx,
     trackerIdx >= 0 ? sequence[trackerIdx].duration : -1
   );
+
+  useEffect(() => {
+    console.log(countDown);
+
+    if (!workout) return;
+
+    if (trackerIdx === workout.sequence.length - 1) return;
+
+    if (countDown === 0) {
+      addItemToSequence(trackerIdx + 1);
+    }
+  }, [countDown]);
 
   const addItemToSequence = (idx: number) => {
     setSquence([...sequence, workout!.sequence[idx]]);
