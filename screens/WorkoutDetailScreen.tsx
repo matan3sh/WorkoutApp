@@ -48,6 +48,9 @@ export default function WorkoutDetailScreen({ route }: Navigation) {
     return null;
   }
 
+  const hasReachedEnd =
+    sequence.length === workout.sequence.length && countDown === 0;
+
   return (
     <View style={styles.container}>
       <WorkoutItem item={workout} childStyles={{ marginTop: 10 }}>
@@ -71,7 +74,7 @@ export default function WorkoutDetailScreen({ route }: Navigation) {
         </Modal>
       </WorkoutItem>
 
-      <View>
+      <View style={styles.centerView}>
         {sequence.length === 0 && (
           <FontAwesome
             name="play-circle-o"
@@ -82,9 +85,19 @@ export default function WorkoutDetailScreen({ route }: Navigation) {
 
         {sequence.length > 0 && countDown >= 0 && (
           <View>
-            <Text>{countDown}</Text>
+            <Text style={{ fontSize: 55 }}>{countDown}</Text>
           </View>
         )}
+      </View>
+
+      <View style={styles.sequenceItem}>
+        <Text style={styles.sequenceText}>
+          {sequence.length === 0
+            ? "Prepare"
+            : hasReachedEnd
+            ? "Great Job!"
+            : sequence[trackerIdx].name}
+        </Text>
       </View>
     </View>
   );
@@ -100,7 +113,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontWeight: "bold",
   },
+  sequenceText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   sequenceItem: {
     alignItems: "center",
+  },
+  centerView: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginBottom: 20,
   },
 });
