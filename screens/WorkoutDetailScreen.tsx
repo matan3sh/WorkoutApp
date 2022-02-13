@@ -37,7 +37,14 @@ export default function WorkoutDetailScreen({ route }: Navigation) {
   }, [countDown]);
 
   const addItemToSequence = (idx: number) => {
-    const newSequence = [...sequence, workout!.sequence[idx]];
+    let newSequence = [];
+
+    if (idx > 0) {
+      newSequence = [...sequence, workout!.sequence[idx]];
+    } else {
+      newSequence = [workout!.sequence[idx]];
+    }
+
     setSquence(newSequence);
     setTrackerIdx(idx);
     start(newSequence[idx].duration);
@@ -73,17 +80,37 @@ export default function WorkoutDetailScreen({ route }: Navigation) {
         </Modal>
       </WorkoutItem>
 
-      <View style={styles.centerView}>
-        {sequence.length === 0 && (
-          <FontAwesome
-            name="play-circle-o"
-            size={100}
-            onPress={() => addItemToSequence(0)}
-          />
-        )}
+      <View style={styles.counterUI}>
+        <View style={styles.counterItem}>
+          {sequence.length === 0 ? (
+            <FontAwesome
+              name="play-circle-o"
+              size={100}
+              onPress={() => addItemToSequence(0)}
+            />
+          ) : isRunning ? (
+            <FontAwesome
+              name="stop-circle-o"
+              size={100}
+              onPress={() => stop()}
+            />
+          ) : (
+            <FontAwesome
+              name="play-circle-o"
+              size={100}
+              onPress={() => {
+                if (hasReachedEnd) {
+                  addItemToSequence(0);
+                } else {
+                  start(countDown);
+                }
+              }}
+            />
+          )}
+        </View>
 
         {sequence.length > 0 && countDown >= 0 && (
-          <View>
+          <View style={styles.counterItem}>
             <Text style={{ fontSize: 55 }}>{countDown}</Text>
           </View>
         )}
@@ -119,10 +146,14 @@ const styles = StyleSheet.create({
   sequenceItem: {
     alignItems: "center",
   },
-  centerView: {
+  counterUI: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     marginBottom: 20,
+  },
+  counterItem: {
+    flex: 1,
+    alignItems: "center",
   },
 });
