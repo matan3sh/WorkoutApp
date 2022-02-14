@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { PressableText } from "./styled/PressableText";
@@ -6,6 +5,8 @@ import { PressableText } from "./styled/PressableText";
 export type ExerciseForm = {
   name: string;
   duration: string;
+  type: string;
+  reps?: string;
 };
 
 type WorkoutProps = {
@@ -13,26 +14,81 @@ type WorkoutProps = {
 };
 
 export default function WorkoutForm({ onSubmit }: WorkoutProps) {
-  const { control } = useForm();
+  const { control, handleSubmit } = useForm();
 
   return (
     <View style={styles.container}>
       <Text>Workout Form</Text>
 
       <View>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          name="name"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              onChangeText={onChange}
-              value={value}
-              style={styles.input}
-            />
-          )}
+        <View style={styles.rowContainer}>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+                placeholder="Name"
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            name="duration"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+                placeholder="Duration"
+              />
+            )}
+          />
+        </View>
+
+        <View style={styles.rowContainer}>
+          <Controller
+            control={control}
+            name="reps"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+                placeholder="Repetitions"
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            name="type"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+                placeholder="Type"
+              />
+            )}
+          />
+        </View>
+
+        <PressableText
+          text="Submit"
+          onPress={handleSubmit((data) => {
+            onSubmit(data as ExerciseForm);
+          })}
         />
       </View>
     </View>
@@ -46,9 +102,15 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   input: {
-    height: 40,
-    margin: 12,
+    flex: 1,
+    margin: 2,
     borderWidth: 1,
-    padding: 10,
+    height: 30,
+    padding: 5,
+    borderRadius: 5,
+    borderColor: "rgba(0,0,0,0.4)",
+  },
+  rowContainer: {
+    flexDirection: "row",
   },
 });
