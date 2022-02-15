@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { PressableText } from "./styled/PressableText";
@@ -13,8 +14,11 @@ type WorkoutProps = {
   onSubmit: (form: ExerciseForm) => void;
 };
 
+const selectionItems = ["Exercise", "Break", "Stretch"];
+
 export default function WorkoutForm({ onSubmit }: WorkoutProps) {
   const { control, handleSubmit } = useForm();
+  const [isSelectionOn, setIsSelectionOn] = useState<boolean>(false);
 
   return (
     <View style={styles.container}>
@@ -74,12 +78,30 @@ export default function WorkoutForm({ onSubmit }: WorkoutProps) {
             }}
             name="type"
             render={({ field: { onChange, value } }) => (
-              <TextInput
-                onChangeText={onChange}
-                value={value}
-                style={styles.input}
-                placeholder="Type"
-              />
+              <View style={{ flex: 1 }}>
+                {isSelectionOn ? (
+                  <View>
+                    {selectionItems.map((selection) => (
+                      <PressableText
+                        text={selection}
+                        key={selection}
+                        onPressIn={() => {
+                          onChange(selection);
+                          setIsSelectionOn(false);
+                        }}
+                        style={styles.selection}
+                      />
+                    ))}
+                  </View>
+                ) : (
+                  <TextInput
+                    onPressIn={() => setIsSelectionOn(true)}
+                    style={styles.input}
+                    value={value}
+                    placeholder="Type"
+                  />
+                )}
+              </View>
             )}
           />
         </View>
@@ -112,5 +134,10 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: "row",
+  },
+  selection: {
+    margin: 2,
+    padding: 3,
+    alignSelf: "center",
   },
 });
