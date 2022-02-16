@@ -3,16 +3,21 @@ import { Modal as DefaultModal, View, StyleSheet } from "react-native";
 import { PressableText } from "./PressableText";
 
 interface IModalProps {
+  animation?: "slide" | "fade";
   activator?: FunctionComponent<{ handleOpen: () => void }>;
   children: ReactNode;
 }
 
-export function Modal({ activator: Activator, children }: IModalProps) {
+export function Modal({
+  activator: Activator,
+  children,
+  animation = "slide",
+}: IModalProps) {
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
   return (
     <>
-      <DefaultModal visible={isModalVisible} animationType="slide">
+      <DefaultModal visible={isModalVisible} animationType={animation}>
         <View style={styles.centerView}>
           <View style={styles.contentView}>{children}</View>
           <PressableText onPress={() => setModalVisible(false)} text="Close" />
