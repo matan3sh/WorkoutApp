@@ -74,17 +74,24 @@ export default function PlannerScreen({ navigation }: NativeStackHeaderProps) {
       {/* Create Workout Modal */}
       <View>
         <Modal
+          animation="fade"
           activator={({ handleOpen }) => (
             <PressableText
               style={{ marginTop: 15 }}
               text="Create Workout"
               onPress={handleOpen}
             />
+          )}>
+          {({ handleClose }) => (
+            <View>
+              <WorkoutForm
+                onSubmit={(data) => {
+                  handleWorkoutSubmit(data);
+                  handleClose();
+                }}
+              />
+            </View>
           )}
-          animation="fade">
-          <View>
-            <WorkoutForm onSubmit={handleWorkoutSubmit} />
-          </View>
         </Modal>
       </View>
     </View>

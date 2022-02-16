@@ -5,7 +5,10 @@ import { PressableText } from "./PressableText";
 interface IModalProps {
   animation?: "slide" | "fade";
   activator?: FunctionComponent<{ handleOpen: () => void }>;
-  children: ReactNode;
+  children: FunctionComponent<{
+    handleOpen: () => void;
+    handleClose: () => void;
+  }>;
 }
 
 export function Modal({
@@ -15,19 +18,23 @@ export function Modal({
 }: IModalProps) {
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
+  const handleOpen = () => setModalVisible(true);
+  const handleClose = () => setModalVisible(false);
+
   return (
     <>
       <DefaultModal visible={isModalVisible} animationType={animation}>
         <View style={styles.centerView}>
+          {children({ handleOpen, handleClose })}
           <View style={styles.contentView}>{children}</View>
-          <PressableText onPress={() => setModalVisible(false)} text="Close" />
+          <PressableText onPress={handleClose} text="Close" />
         </View>
       </DefaultModal>
 
       {Activator ? (
-        <Activator handleOpen={() => setModalVisible(true)} />
+        <Activator handleOpen={handleOpen} />
       ) : (
-        <PressableText onPress={() => setModalVisible(true)} text="Open" />
+        <PressableText onPress={handleOpen} text="Open" />
       )}
     </>
   );
