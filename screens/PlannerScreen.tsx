@@ -26,6 +26,13 @@ export default function PlannerScreen({ navigation }: NativeStackHeaderProps) {
     setSequenceItems([...sequenceItems, sequenceItem]);
   };
 
+  const computeDiff = (exercisesCount: number, workoutDuration: number) => {
+    const intensity = workoutDuration / exercisesCount;
+    if (intensity <= 60) return "hard";
+    else if (intensity <= 100) return "normal";
+    else return "easy";
+  };
+
   const handleWorkoutSubmit = (form: WorkoutFormData) => {
     if (sequenceItems.length > 0) {
       const duration = sequenceItems.reduce(
@@ -35,7 +42,7 @@ export default function PlannerScreen({ navigation }: NativeStackHeaderProps) {
       const workout: Workout = {
         name: form.name,
         slug: slugify(form.name + "-" + Date.now(), { lower: true }),
-        difficulty: "easy",
+        difficulty: computeDiff(sequenceItems.length, duration),
         sequence: [...sequenceItems],
         duration,
       };
@@ -64,7 +71,7 @@ export default function PlannerScreen({ navigation }: NativeStackHeaderProps) {
 
       <ExerciseForm onSubmit={handleExerciseSubmit} />
 
-      {/* Create Workout */}
+      {/* Create Workout Modal */}
       <View>
         <Modal
           activator={({ handleOpen }) => (
