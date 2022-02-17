@@ -25,8 +25,9 @@ export function Modal({
     <>
       <DefaultModal visible={isModalVisible} animationType={animation}>
         <View style={styles.centerView}>
-          {children({ handleOpen, handleClose })}
-          <View style={styles.contentView}>{children}</View>
+          <View style={styles.contentView}>
+            {children({ handleOpen, handleClose })}
+          </View>
           <PressableText onPress={handleClose} text="Close" />
         </View>
       </DefaultModal>

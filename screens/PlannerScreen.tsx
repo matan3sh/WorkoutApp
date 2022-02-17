@@ -9,6 +9,7 @@ import ExerciseItem from "../components/ExerciseItem";
 import { PressableText } from "../components/styled/PressableText";
 import { Modal } from "../components/styled/Modal";
 import WorkoutForm, { WorkoutFormData } from "../components/WorkoutForm";
+import { storeWorkout } from "../storage/workout";
 
 export default function PlannerScreen({ navigation }: NativeStackHeaderProps) {
   const [sequenceItems, setSequenceItems] = useState<SequenceItem[]>([]);
@@ -33,12 +34,13 @@ export default function PlannerScreen({ navigation }: NativeStackHeaderProps) {
     else return "easy";
   };
 
-  const handleWorkoutSubmit = (form: WorkoutFormData) => {
+  const handleWorkoutSubmit = async (form: WorkoutFormData) => {
     if (sequenceItems.length > 0) {
       const duration = sequenceItems.reduce(
         (acc, item) => acc + item.duration,
         0
       );
+
       const workout: Workout = {
         name: form.name,
         slug: slugify(form.name + "-" + Date.now(), { lower: true }),
@@ -46,7 +48,8 @@ export default function PlannerScreen({ navigation }: NativeStackHeaderProps) {
         sequence: [...sequenceItems],
         duration,
       };
-      console.log(workout);
+
+      await storeWorkout(workout);
     }
   };
 
@@ -85,9 +88,10 @@ export default function PlannerScreen({ navigation }: NativeStackHeaderProps) {
           {({ handleClose }) => (
             <View>
               <WorkoutForm
-                onSubmit={(data) => {
-                  handleWorkoutSubmit(data);
+                onSubmit={async (data) => {
+                  await handleWorkoutSubmit(data);
                   handleClose();
+                  navigation.navigate("Home");
                 }}
               />
             </View>
