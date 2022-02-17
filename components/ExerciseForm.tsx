@@ -36,6 +36,7 @@ export default function ExerciseForm({ onSubmit }: ExerciseProps) {
                 value={value}
                 style={styles.input}
                 placeholder="Name"
+                placeholderTextColor={"rgba(0,0,0,0.4)"}
               />
             )}
           />
@@ -51,6 +52,7 @@ export default function ExerciseForm({ onSubmit }: ExerciseProps) {
                 value={value}
                 style={styles.input}
                 placeholder="Duration"
+                placeholderTextColor={"rgba(0,0,0,0.4)"}
               />
             )}
           />
@@ -66,6 +68,7 @@ export default function ExerciseForm({ onSubmit }: ExerciseProps) {
                 value={value}
                 style={styles.input}
                 placeholder="Repetitions"
+                placeholderTextColor={"rgba(0,0,0,0.4)"}
               />
             )}
           />
@@ -97,6 +100,7 @@ export default function ExerciseForm({ onSubmit }: ExerciseProps) {
                     style={styles.input}
                     value={value}
                     placeholder="Type"
+                    placeholderTextColor={"rgba(0,0,0,0.4)"}
                   />
                 )}
               </View>

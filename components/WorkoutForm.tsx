@@ -28,6 +28,7 @@ export default function WorkoutForm({ onSubmit }: WorkoutProps) {
             value={value}
             style={styles.input}
             placeholder="Workout Name"
+            placeholderTextColor={"rgba(0,0,0,0.4)"}
           />
         )}
       />
